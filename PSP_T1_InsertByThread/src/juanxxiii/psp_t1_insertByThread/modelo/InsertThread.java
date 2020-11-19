@@ -7,10 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class InsertThread extends Thread{
-	private int numOfInserts;
 	private final String URL = "jdbc:mariadb://db.riscodavila.com:3306/BBDD_PSP_1?serverTimeZone=UTC&user=joel&password=atila95";
 	private final String INSERT_QUERY = "INSERT INTO (EMAIL, INGRESOS) VALUES (?,?)";
 	private final String LAST_ID = "SELECT ID FROM EMPLEADOS DESC LIMIT 1";
+	private final String ERROR_MSG = "ERROR DURANTE LA INSERCIÓN. CAUSA: ";
+	private final String END_PROCESS_MSG = "-->Hilo terminado correctamente.";
+	private int numOfInserts;
 	
 	public InsertThread(int inserts) {
 		this.numOfInserts=inserts;
@@ -33,8 +35,9 @@ public class InsertThread extends Thread{
 				statement.setInt(2, (int)Math.random() * 1000 + 1);
 				insert = statement.executeQuery();
 			}
+			System.out.println(END_PROCESS_MSG);
 		}catch(SQLException e) {
-			System.out.println("ERROR DURANTE LA INSERCIÓN. CAUSA: " + e.getMessage());
+			System.out.println(ERROR_MSG + e.getMessage());
 		}
 	}
 }

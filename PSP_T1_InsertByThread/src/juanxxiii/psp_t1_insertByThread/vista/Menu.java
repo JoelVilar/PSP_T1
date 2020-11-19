@@ -2,6 +2,8 @@ package juanxxiii.psp_t1_insertByThread.vista;
 
 import java.util.Scanner;
 
+import juanxxiii.psp_t1_insertByThread.controlador.ThreadManager;
+
 public class Menu {
 	private final String APP_HEAD="Práctica del 1er Trimestre.";
 	private final String ASK_NUM_OF_INSERTS="¿Cuántos registros desea insertar? ";
@@ -17,11 +19,12 @@ public class Menu {
 			if(numOfInserts<=0) System.out.println(ERROR_ON_RANGE);
 		}while(numOfInserts<=0);
 
+		int numOfThreads=-1;
 		do{
 			System.out.print(ASK_NUM_OF_THREADS);
-			numOfInserts=keyB.nextInt();
-			if(numOfInserts<=0) System.out.println(ERROR_ON_RANGE);
-		}while(numOfInserts<=0);
-		
+			numOfThreads=keyB.nextInt();
+			if(numOfThreads<=0) System.out.println(ERROR_ON_RANGE);
+		}while(numOfThreads<=0);
+		new ThreadManager(numOfInserts, numOfThreads).begin();
 	}
 }
