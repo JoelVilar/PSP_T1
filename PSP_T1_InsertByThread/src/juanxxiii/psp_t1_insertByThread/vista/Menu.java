@@ -9,9 +9,32 @@ public class Menu {
 	private final String ASK_NUM_OF_INSERTS="¿Cuántos registros desea insertar? ";
 	private final String ASK_NUM_OF_THREADS="¿Cuántos Hilos desea utilizar? ";
 	private final String ERROR_ON_RANGE="Valor no permitido, inténtelo de nuevo.";
+	private final String BYE_MSG="Adiós.";
+	private final String MENU_DIALOG="¿Qué desea hacer?\n"
+			+ "1.Insertar registros en la base de datos.\n"
+			+ "0.Salir";
 	private Scanner keyB = new Scanner(System.in);
+	
 	public void showMenu() {
 		System.out.println(APP_HEAD);
+		int option=-1;
+		do {
+			System.out.println(MENU_DIALOG);
+			switch(option) {
+			case 1:
+				insertDataMenu();
+				break;
+			case 0:
+				System.out.println(BYE_MSG);
+				break;
+			default:
+				System.out.println(ERROR_ON_RANGE);
+				break;
+			}
+		}while(option!=0);
+	}
+	
+	private void insertDataMenu() {
 		int numOfInserts=-1;
 		do{
 			System.out.print(ASK_NUM_OF_INSERTS);

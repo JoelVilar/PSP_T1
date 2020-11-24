@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class InsertThread extends Thread{
 	private final String URL = "jdbc:mariadb://37.134.98.200:3306/BBDD_PSP_1?serverTimeZone=UTC&user=joel&password=atila95";
-	private final String INSERT_QUERY = "INSERT INTO (EMAIL, INGRESOS) VALUES (?,?)";
+	private final String INSERT_QUERY = "INSERT INTO EMPLEADOS (EMAIL, INGRESOS) VALUES (?,?)";
 	private final String LAST_ID = "SELECT ID FROM EMPLEADOS ORDER BY ID DESC LIMIT 1";
 	private final String ERROR_MSG = "ERROR DURANTE LA INSERCIÓN. CAUSA: ";
 	private final String END_PROCESS_MSG = "-->Hilo terminado correctamente.";
