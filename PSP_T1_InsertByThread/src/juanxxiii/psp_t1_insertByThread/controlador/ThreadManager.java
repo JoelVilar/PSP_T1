@@ -18,7 +18,7 @@ public class ThreadManager {
 		for(int x = 0; x<numOfThreads;x++) {
 			givenNumber = x<numOfThreads-1 ? nums[0] : nums[0] + nums[1];
 			thread = new InsertThread(givenNumber);
-			thread.run();
+			thread.start();
 			System.out.println("Hilo " + (x+1) + " ejecutado.");
 		}
 	}

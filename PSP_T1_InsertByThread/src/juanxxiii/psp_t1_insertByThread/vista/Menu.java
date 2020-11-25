@@ -20,6 +20,7 @@ public class Menu {
 		int option=-1;
 		do {
 			System.out.println(MENU_DIALOG);
+			option = keyB.nextInt();
 			switch(option) {
 			case 1:
 				insertDataMenu();
