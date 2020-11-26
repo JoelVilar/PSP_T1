@@ -1,27 +1,36 @@
 package juanxxiii.psp_t1_insertByThread.vista;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import juanxxiii.psp_t1_insertByThread.controlador.ThreadManager;
-import juanxxiii.psp_t1_insertByThread.modelo.AccessManager;
+import juanxxiii.psp_t1_insertByThread.controlador.AccessManager;
 
+/**
+ * Clase que gestiona el menú y los datos que introducimos en este.
+ * @author Atila
+ *
+ */
 public class Menu {
-	private final String APP_HEAD="Práctica del 1er Trimestre.";
-	private final String ASK_NUM_OF_INSERTS="¿Cuántos registros desea insertar? ";
-	private final String ASK_NUM_OF_THREADS="¿Cuántos Hilos desea utilizar? ";
-	private final String ERROR_ON_RANGE="Valor no permitido, inténtelo de nuevo.";
-	private final String BYE_MSG="Adiós.";
-	private final String MENU_DIALOG="¿Qué desea hacer?\n"
+	private static final String APP_HEAD = "Práctica del 1er Trimestre.";
+	private static final String ASK_NUM_OF_INSERTS = "¿Cuántos registros desea insertar? ";
+	private static final String ASK_NUM_OF_THREADS = "¿Cuántos Hilos desea utilizar? ";
+	private static final String ERROR_ON_RANGE = "Valor no permitido, inténtelo de nuevo.";
+	private static final String BYE_MSG = "Adiós.";
+	private static final String MENU_DIALOG = "¿Qué desea hacer?\n"
 			+ "1.Insertar registros en la base de datos.\n"
 			+ "0.Salir";
 	private Scanner keyB = new Scanner(System.in);
 	
+	/**
+	 * Método que muestra el menú en el que el usuario escogerá si insertar datos o abortar.
+	 * Repetido hasta que este decida salir.
+	 */
 	public void showMenu() {
 		System.out.println(APP_HEAD);
 		int option=-1;
 		do {
 			System.out.println(MENU_DIALOG);
-			option = keyB.nextInt();
+			option = getOption();
 			switch(option) {
 			case 1:
 				insertDataMenuPool();
@@ -35,40 +44,48 @@ public class Menu {
 			}
 		}while(option!=0);
 	}
+	
+	/**
+	 * Método que nos pedirá un número de registros a insertar y número de hilos que queremos
+	 * utilizar para ello.
+	 */
+	private void insertDataMenuPool() {
 
-	private void insertDataMenu() {
 		int numOfInserts=-1;
 		do{
 			System.out.print(ASK_NUM_OF_INSERTS);
-			numOfInserts=keyB.nextInt();
+			numOfInserts=getOption();
 			if(numOfInserts<=0) System.out.println(ERROR_ON_RANGE);
 		}while(numOfInserts<=0);
 
 		int numOfThreads=-1;
 		do{
 			System.out.print(ASK_NUM_OF_THREADS);
-			numOfThreads=keyB.nextInt();
+			numOfThreads=getOption();
 			if(numOfThreads<=0) System.out.println(ERROR_ON_RANGE);
 		}while(numOfThreads<=0);
-		new ThreadManager(numOfInserts, numOfThreads).begin();
+		/*
+		 * Instanciamos un objeto de la clase AccessManager, que controlará el flujo de los hilos
+		 * y los registros.
+		 * */
+		new AccessManager(numOfThreads, numOfInserts).insertData();
 	}
 	
-	private void insertDataMenuPool() {
-		
-		int numOfInserts=-1;
-		do{
-			System.out.print(ASK_NUM_OF_INSERTS);
-			numOfInserts=keyB.nextInt();
-			if(numOfInserts<=0) System.out.println(ERROR_ON_RANGE);
-		}while(numOfInserts<=0);
-
-		int numOfThreads=-1;
-		do{
-			System.out.print(ASK_NUM_OF_THREADS);
-			numOfThreads=keyB.nextInt();
-			if(numOfThreads<=0) System.out.println(ERROR_ON_RANGE);
-		}while(numOfThreads<=0);
-		
-		new AccessManager(numOfThreads, numOfInserts).insertData();
+	/**
+	 * Método que pide al usuario que introduzca un número y lo devuelve, controlando sus excepciones.
+	 * @return
+	 */
+	public int getOption() {
+		boolean check=false;
+		int option=0;
+		do {
+			try {
+				option = keyB.nextInt();
+				check=true;
+			} catch(InputMismatchException e) {
+				System.out.println("Por favor, introduzca un número.");
+			}
+		}while(!check);
+		return option;
 	}
 }
