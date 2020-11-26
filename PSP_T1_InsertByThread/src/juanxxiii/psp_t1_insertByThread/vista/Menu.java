@@ -3,6 +3,7 @@ package juanxxiii.psp_t1_insertByThread.vista;
 import java.util.Scanner;
 
 import juanxxiii.psp_t1_insertByThread.controlador.ThreadManager;
+import juanxxiii.psp_t1_insertByThread.modelo.AccessManager;
 
 public class Menu {
 	private final String APP_HEAD="Práctica del 1er Trimestre.";
@@ -23,7 +24,7 @@ public class Menu {
 			option = keyB.nextInt();
 			switch(option) {
 			case 1:
-				insertDataMenu();
+				insertDataMenuPool();
 				break;
 			case 0:
 				System.out.println(BYE_MSG);
@@ -34,7 +35,7 @@ public class Menu {
 			}
 		}while(option!=0);
 	}
-	
+
 	private void insertDataMenu() {
 		int numOfInserts=-1;
 		do{
@@ -50,5 +51,24 @@ public class Menu {
 			if(numOfThreads<=0) System.out.println(ERROR_ON_RANGE);
 		}while(numOfThreads<=0);
 		new ThreadManager(numOfInserts, numOfThreads).begin();
+	}
+	
+	private void insertDataMenuPool() {
+		
+		int numOfInserts=-1;
+		do{
+			System.out.print(ASK_NUM_OF_INSERTS);
+			numOfInserts=keyB.nextInt();
+			if(numOfInserts<=0) System.out.println(ERROR_ON_RANGE);
+		}while(numOfInserts<=0);
+
+		int numOfThreads=-1;
+		do{
+			System.out.print(ASK_NUM_OF_THREADS);
+			numOfThreads=keyB.nextInt();
+			if(numOfThreads<=0) System.out.println(ERROR_ON_RANGE);
+		}while(numOfThreads<=0);
+		
+		new AccessManager(numOfThreads, numOfInserts).insertData();
 	}
 }
