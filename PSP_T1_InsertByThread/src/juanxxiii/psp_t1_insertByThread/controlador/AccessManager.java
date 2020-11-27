@@ -1,8 +1,8 @@
 package juanxxiii.psp_t1_insertByThread.controlador;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
@@ -14,6 +14,8 @@ import juanxxiii.psp_t1_insertByThread.modelo.InsertThread;
  *
  */
 public class AccessManager{
+	private static final String ERROR_HEAD_MSG = "ERROR: ";
+	private static final int BEGIN_COUNT = 0;
 	private ExecutorService executor;
 	private AtomicInteger cont;
 	private int numOfThreads;
@@ -32,10 +34,18 @@ public class AccessManager{
 	 * Método que ejecuta los hilos deseados.
 	 */
 	public void insertData() {
-		IntStream.range(0, numOfThreads)
-					.forEach(e-> executor.execute(()-> new InsertThread(this).start()));
+		ArrayList<InsertThread> threads = new ArrayList<>();
+		IntStream.range(BEGIN_COUNT, numOfThreads)
+					.forEach(i-> {
+						threads.add(new InsertThread(this));
+						executor.execute(()-> threads.get(i).start());
+					});
 		executor.shutdown();
-		System.out.println("Proceso terminado correctamente.");
+		try {
+			threads.get(numOfThreads-1).join();
+		} catch (InterruptedException e) {
+			System.out.println(ERROR_HEAD_MSG + e.getMessage());
+		}
 	}
 	/**
 	 * Devuelve el ExecutorService de la clase.

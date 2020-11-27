@@ -11,7 +11,10 @@ import juanxxiii.psp_t1_insertByThread.controlador.AccessManager;
  *
  */
 public class Menu {
-	private static final String APP_HEAD = "Práctica del 1er Trimestre.";
+	private static final int BEGIN_COUNT = 0;
+	private static final int ERROR_VALUE = -1;
+	private static final String ERROR_NAN_MSG = "Por favor, introduzca un número.";
+	private static final String APP_HEAD = "Práctica del 1er Trimestre. Aplicación para inserción de datos.";
 	private static final String ASK_NUM_OF_INSERTS = "¿Cuántos registros desea insertar? ";
 	private static final String ASK_NUM_OF_THREADS = "¿Cuántos Hilos desea utilizar? ";
 	private static final String ERROR_ON_RANGE = "Valor no permitido, inténtelo de nuevo.";
@@ -27,7 +30,7 @@ public class Menu {
 	 */
 	public void showMenu() {
 		System.out.println(APP_HEAD);
-		int option=-1;
+		int option=ERROR_VALUE;
 		do {
 			System.out.println(MENU_DIALOG);
 			option = getOption();
@@ -51,19 +54,19 @@ public class Menu {
 	 */
 	private void insertDataMenuPool() {
 
-		int numOfInserts=-1;
+		int numOfInserts=ERROR_VALUE;
 		do{
 			System.out.print(ASK_NUM_OF_INSERTS);
 			numOfInserts=getOption();
-			if(numOfInserts<=0) System.out.println(ERROR_ON_RANGE);
-		}while(numOfInserts<=0);
+			if(numOfInserts<=BEGIN_COUNT) System.out.println(ERROR_ON_RANGE);
+		}while(numOfInserts<=BEGIN_COUNT);
 
-		int numOfThreads=-1;
+		int numOfThreads=ERROR_VALUE;
 		do{
 			System.out.print(ASK_NUM_OF_THREADS);
 			numOfThreads=getOption();
-			if(numOfThreads<=0) System.out.println(ERROR_ON_RANGE);
-		}while(numOfThreads<=0);
+			if(numOfThreads<=BEGIN_COUNT) System.out.println(ERROR_ON_RANGE);
+		}while(numOfThreads<=BEGIN_COUNT);
 		/*
 		 * Instanciamos un objeto de la clase AccessManager, que controlará el flujo de los hilos
 		 * y los registros.
@@ -83,7 +86,8 @@ public class Menu {
 				option = keyB.nextInt();
 				check=true;
 			} catch(InputMismatchException e) {
-				System.out.println("Por favor, introduzca un número.");
+				keyB.nextLine();
+				System.out.println(ERROR_NAN_MSG);
 			}
 		}while(!check);
 		return option;

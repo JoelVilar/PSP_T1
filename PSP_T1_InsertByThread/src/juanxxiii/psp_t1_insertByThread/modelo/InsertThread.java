@@ -14,7 +14,9 @@ import juanxxiii.psp_t1_insertByThread.controlador.AccessManager;
  *
  */
 public class InsertThread extends Thread{
-	private static final String URL = "jdbc:mariadb://37.134.98.200:3306/BBDD_PSP_1?serverTimeZone=UTC&user=joel&password=atila95";
+	private static final int MIN_VALUE_RANDOM = 10;
+	private static final int MAX_VALUE_RANDOM = 990;
+	private static final String URL = "jdbc:mysql://localhost/BBDD_PSP_1?serverTimeZone=UTC&user=DAM2020_PSP&password=DAM2020_PSP";
 	private static final String INSERT_QUERY = "INSERT INTO EMPLEADOS (EMAIL, INGRESOS) VALUES (?,?)";
 	private static final String ERROR_MSG = "ERROR DURANTE LA INSERCIÓN. CAUSA: ";
 	private static final String END_PROCESS_MSG = "-->Hilo terminado correctamente.";
@@ -22,8 +24,8 @@ public class InsertThread extends Thread{
 	private static final String NUM_EMPLEADO_MSG = "Empleado nº ";
 	private static final String WHICH_THREAD_MSG = " introducido exitosamente con el hilo: ";
 	private static final int COND_WHILE = 0;
-	private static final int INGRESOS_COLUMN = 2;
 	private static final int EMAIL_COLUMN = 1;
+	private static final int INGRESOS_COLUMN = 2;
 	private AccessManager accessManager;
 	
 	/**
@@ -53,18 +55,15 @@ public class InsertThread extends Thread{
 			 * */
 			int contador;
 			while((contador=accessManager.getCont().getAndDecrement())>COND_WHILE) {
-				insertNewEmployee();
-				System.out.println(NUM_EMPLEADO_MSG
-									+ contador
-									+ WHICH_THREAD_MSG
-									+ this.getName());
+				insertNewEmployee(contador);
 			}
+			System.out.println(END_PROCESS_MSG);
 	}
 	
 	/**
 	 * Método para la inserción de un nuevo registro en la base de datos.
 	 */
-	public void insertNewEmployee() {
+	public void insertNewEmployee(int contador) {
 		/*
 		 * Try con recursos, este permite que si se le pasa una clase que implemente
 		 * la interface Closeable, este finalice al terminar el bloque try-catch sin
@@ -75,17 +74,20 @@ public class InsertThread extends Thread{
 				statement.setString(EMAIL_COLUMN, EMAIL);
 				statement.setInt(INGRESOS_COLUMN, generateRandom());
 				statement.executeQuery();
-			System.out.println(END_PROCESS_MSG);
+			System.out.println(NUM_EMPLEADO_MSG
+					+ contador
+					+ WHICH_THREAD_MSG
+					+ this.getName());
 		}catch(SQLException e) {
 			System.out.println(ERROR_MSG + e.getMessage());
 		}
 	}
 	
 	/**
-	 * Método que genera un número random entre 1 y 1000;
+	 * Método que genera un número random entre 10 y 1000;
 	 * @return
 	 */
 	private int generateRandom() {
-		return (int)(Math.random() * 1000 + 1);
+		return (int)(Math.random() * MAX_VALUE_RANDOM + MIN_VALUE_RANDOM);
 	}
 }
